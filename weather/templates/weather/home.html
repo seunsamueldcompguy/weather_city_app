@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
     <link rel="shortcut icon" href="https://cdn3.iconfinder.com/data/icons/bebreezee-weather-symbols/691/icon-weather-sunsleetlight-512.png" type="image/x-icon">
 </head>
-
 <body>
     <section class="hero is-primary">
         <div class="hero-body">
@@ -24,7 +22,24 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-offset-4 is-4">
+                    <form  method="POST">
+                        {% csrf_token %}
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                {{ form.city_name }}
+                            </div>
 
+                            <div class="control">
+                                <button class="button is-info" type="submit">
+                                    Add City
+                                </button>
+                            </div>
+                        </div>
+                            {% if message %}
+                                <div class="notification {{ message_class }}">{{ message }}<button class="del-msg delete" onclick="document.getElementsByClassName('notification')[0].style.display='none'"></button></div>
+                                    {{ message }}
+                            {% endif %}
+                    </form>
                 </div>
             </div>
         </div>
@@ -51,6 +66,11 @@
                                         </p>
                                     </div>
                                 </div>
+                                   <div class="media-right">
+                                        <a href="{% url 'delete_city' city_weather.city%}">
+                                            <button class="delete"></button>
+                                        </a>
+                                    </div>
                             </article>
                         </div>
                     {% endfor %}
@@ -60,6 +80,7 @@
     </section>
     <footer class="footer">
     </footer>
-</body>
 
+<div style="margin-top:760px;"></div>
+</body>
 </html>

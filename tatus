@@ -1,0 +1,197 @@
+warning: LF will be replaced by CRLF in .idea/workspace.xml.
+The file will have its original line endings in your working directory
+[1mdiff --git a/.idea/dictionaries/user.xml b/.idea/dictionaries/user.xml[m
+[1mindex fe6854b..986c01e 100644[m
+[1m--- a/.idea/dictionaries/user.xml[m
+[1m+++ b/.idea/dictionaries/user.xml[m
+[36m@@ -1,6 +1,8 @@[m
+ <component name="ProjectDictionaryState">[m
+   <dictionary name="user">[m
+     <words>[m
+[32m+[m[32m      <w>addons</w>[m
+[32m+[m[32m      <w>appid</w>[m
+       <w>endfor</w>[m
+       <w>postgresql</w>[m
+       <w>thunderstrom</w>[m
+[1mdiff --git a/.idea/workspace.xml b/.idea/workspace.xml[m
+[1mindex 3cb5af2..77ff8b0 100644[m
+[1m--- a/.idea/workspace.xml[m
+[1m+++ b/.idea/workspace.xml[m
+[36m@@ -11,8 +11,8 @@[m
+   <component name="FileTemplateManagerImpl">[m
+     <option name="RECENT_TEMPLATES">[m
+       <list>[m
+[31m-        <option value="Python Script" />[m
+         <option value="HTML File" />[m
+[32m+[m[32m        <option value="Python Script" />[m
+       </list>[m
+     </option>[m
+   </component>[m
+[1mdiff --git a/weather/__pycache__/models.cpython-38.pyc b/weather/__pycache__/models.cpython-38.pyc[m
+[1mindex ef9e304..7e22651 100644[m
+Binary files a/weather/__pycache__/models.cpython-38.pyc and b/weather/__pycache__/models.cpython-38.pyc differ
+[1mdiff --git a/weather/__pycache__/urls.cpython-38.pyc b/weather/__pycache__/urls.cpython-38.pyc[m
+[1mindex c284c40..71b9048 100644[m
+Binary files a/weather/__pycache__/urls.cpython-38.pyc and b/weather/__pycache__/urls.cpython-38.pyc differ
+[1mdiff --git a/weather/__pycache__/views.cpython-38.pyc b/weather/__pycache__/views.cpython-38.pyc[m
+[1mindex feff3ea..d9c4721 100644[m
+Binary files a/weather/__pycache__/views.cpython-38.pyc and b/weather/__pycache__/views.cpython-38.pyc differ
+[1mdiff --git a/weather/models.py b/weather/models.py[m
+[1mindex 1a8c0ee..5b3a85d 100644[m
+[1m--- a/weather/models.py[m
+[1m+++ b/weather/models.py[m
+[36m@@ -8,4 +8,5 @@[m [mclass City(models.Model):[m
+ [m
+     class Meta:[m
+         verbose_name_plural = 'cities'[m
+[32m+[m[32m        ordering = ['-city_name'][m
+ [m
+[1mdiff --git a/weather/templates/weather/home.html b/weather/templates/weather/home.html[m
+[1mindex 40a00f3..79e0a96 100644[m
+[1m--- a/weather/templates/weather/home.html[m
+[1m+++ b/weather/templates/weather/home.html[m
+[36m@@ -1,6 +1,5 @@[m
+ <!DOCTYPE html>[m
+ <html lang="en">[m
+[31m-[m
+ <head>[m
+     <meta charset="UTF-8">[m
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[36m@@ -9,7 +8,6 @@[m
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />[m
+     <link rel="shortcut icon" href="https://cdn3.iconfinder.com/data/icons/bebreezee-weather-symbols/691/icon-weather-sunsleetlight-512.png" type="image/x-icon">[m
+ </head>[m
+[31m-[m
+ <body>[m
+     <section class="hero is-primary">[m
+         <div class="hero-body">[m
+[36m@@ -24,7 +22,24 @@[m
+         <div class="container">[m
+             <div class="columns">[m
+                 <div class="column is-offset-4 is-4">[m
+[32m+[m[32m                    <form  method="POST">[m
+[32m+[m[32m                        {% csrf_token %}[m
+[32m+[m[32m                        <div class="field has-addons">[m
+[32m+[m[32m                            <div class="control is-expanded">[m
+[32m+[m[32m                                {{ form.city_name }}[m
+[32m+[m[32m                            </div>[m
+ [m
+[32m+[m[32m                            <div class="control">[m
+[32m+[m[32m                                <button class="button is-info" type="submit">[m
+[32m+[m[32m                                    Add City[m
+[32m+[m[32m                                </button>[m
+[32m+[m[32m                            </div>[m
+[32m+[m[32m                        </div>[m
+[32m+[m[32m                            {% if message %}[m
+[32m+[m[32m                                <div class="notification {{ message_class }}">{{ message }}<button class="del-msg delete" onclick="document.getElementsByClassName('notification')[0].style.display='none'"></button></div>[m
+[32m+[m[32m                                    {{ message }}[m
+[32m+[m[32m                            {% endif %}[m
+[32m+[m[32m                    </form>[m
+                 </div>[m
+             </div>[m
+         </div>[m
+[36m@@ -51,6 +66,11 @@[m
+                                         </p>[m
+                                     </div>[m
+                                 </div>[m
+[32m+[m[32m                                   <div class="media-right">[m
+[32m+[m[32m                                        <a href="{% url 'delete_city' city_weather.city%}">[m
+[32m+[m[32m                                            <button class="delete"></button>[m
+[32m+[m[32m                                        </a>[m
+[32m+[m[32m                                    </div>[m
+                             </article>[m
+                         </div>[m
+                     {% endfor %}[m
+[36m@@ -60,6 +80,7 @@[m
+     </section>[m
+     <footer class="footer">[m
+     </footer>[m
+[31m-</body>[m
+ [m
+[32m+[m[32m<div style="margin-top:760px;"></div>[m
+[32m+[m[32m</body>[m
+ </html>[m
+\ No newline at end of file[m
+[1mdiff --git a/weather/urls.py b/weather/urls.py[m
+[1mindex 4d416df..4961d11 100644[m
+[1m--- a/weather/urls.py[m
+[1m+++ b/weather/urls.py[m
+[36m@@ -3,5 +3,6 @@[m [mfrom . import views[m
+ [m
+ [m
+ urlpatterns = [[m
+[31m-    path('', views.index, name='index')[m
+[32m+[m[32m    path('', views.index, name='index'),[m
+[32m+[m[32m    path('delete/<cities_name>/', views.delete_city, name='delete_city')[m
+ ][m
+\ No newline at end of file[m
+[1mdiff --git a/weather/views.py b/weather/views.py[m
+[1mindex 6ad60da..c0aef5c 100644[m
+[1m--- a/weather/views.py[m
+[1m+++ b/weather/views.py[m
+[36m@@ -1,12 +1,42 @@[m
+[31m-from django.shortcuts import render, get_object_or_404[m
+[32m+[m[32mfrom django.shortcuts import render, redirect[m
+ import requests[m
+ from .models import City[m
+[32m+[m[32mfrom .forms import CityForm[m
+[32m+[m
+ [m
+ def index(request):[m
+     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=e4ffd5e7ea455ca0b6ad57d3147d3343'[m
+[31m-    city = 'Abuja'[m
+ [m
+[32m+[m[32m    err_msg = ""[m
+[32m+[m[32m    message = ''[m
+[32m+[m[32m    message_class = ''[m
+[32m+[m
+[32m+[m[32m    if request.method == 'POST':[m
+[32m+[m[32m        form = CityForm(request.POST)[m
+[32m+[m
+[32m+[m[32m        if form.is_valid():[m
+[32m+[m[32m            new_city = form.cleaned_data['city_name'][m
+[32m+[m[32m            existing_city = City.objects.filter(city_name=new_city).count()[m
+[32m+[m
+[32m+[m[32m            if existing_city == 0:[m
+[32m+[m[32m                response = requests.get(url.format(new_city)).json()[m
+[32m+[m
+[32m+[m[32m                if response['cod'] == 200:[m
+[32m+[m[32m                    form.save()[m
+[32m+[m[32m                else:[m
+[32m+[m[32m                    err_msg = 'City does not exist in the world!'[m
+ [m
+[32m+[m[32m            else:[m
+[32m+[m[32m                err_msg = 'City already exist in the database'[m
+[32m+[m
+[32m+[m[32m        if err_msg:[m
+[32m+[m[32m            message = err_msg[m
+[32m+[m[32m            message_class = 'is-danger'[m
+[32m+[m[32m        else:[m
+[32m+[m[32m            message = 'City added successfully!'[m
+[32m+[m[32m            message_class = 'is-success'[m
+[32m+[m
+[32m+[m[32m    form = CityForm()[m
+ [m
+     cities = City.objects.all()[m
+     weather_data = [][m
+[36m@@ -21,7 +51,18 @@[m [mdef index(request):[m
+             'icon': response['weather'][0]['icon'][m
+         }[m
+ [m
+[31m-    weather_data.append(city_weather)[m
+[32m+[m[32m        weather_data.append(city_weather)[m
+[32m+[m
+[32m+[m[32m    context = {[m
+[32m+[m[32m        'weather_data': weather_data,[m
+[32m+[m[32m        'form': form,[m
+[32m+[m[32m        'message': message,[m
+[32m+[m[32m        'message_class': message_class[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return render(request, 'weather/home.html', context)[m
+ [m
+[31m-    return render(request, 'weather/home.html', {'weather_data': weather_data})[m
+ [m
+[32m+[m[32mdef delete_city(request, cities_name):[m
+[32m+[m[32m    City.objects.get(city_name=cities_name).delete()[m
+[32m+[m[32m    return redirect('index')[m
