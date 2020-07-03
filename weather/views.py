@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import requests
 from .models import City
 from .forms import CityForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def index(request):
@@ -37,8 +38,8 @@ def index(request):
             message_class = 'is-success'
 
     form = CityForm()
-
     cities = City.objects.all()
+
     weather_data = []
 
     for city in cities:
@@ -53,11 +54,12 @@ def index(request):
 
         weather_data.append(city_weather)
 
+
     context = {
         'weather_data': weather_data,
         'form': form,
         'message': message,
-        'message_class': message_class
+        'message_class': message_class,
     }
 
     return render(request, 'weather/home.html', context)
@@ -66,3 +68,5 @@ def index(request):
 def delete_city(request, cities_name):
     City.objects.get(city_name=cities_name).delete()
     return redirect('index')
+
+
